@@ -1,0 +1,54 @@
+<Page
+    x:Class="SvgConverter.SampleApp.Views.ShellPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    DataContext="{Binding ShellViewModel, Source={StaticResource Locator}}"
+    xmlns:helpers="using:SvgConverter.SampleApp.Helpers"
+    xmlns:ic="using:Microsoft.Xaml.Interactions.Core"
+    xmlns:i="using:Microsoft.Xaml.Interactivity"
+    mc:Ignorable="d">
+    <NavigationView
+        x:Name="navigationView"
+        SelectedItem="{x:Bind ViewModel.Selected, Mode=OneWay}"
+        Header="{x:Bind ViewModel.Selected.Content, Mode=OneWay}"
+        IsSettingsVisible="True"
+        AlwaysShowHeader="False"
+        Background="{ThemeResource SystemControlBackgroundAltHighBrush}">
+        <NavigationView.MenuItems>
+            <NavigationViewItem x:Uid="Shell_SvgViewer"
+                                helpers:NavHelper.NavigateTo="SvgConverter.SampleApp.ViewModels.SvgViewerViewModel">
+                <NavigationViewItem.Icon>
+                    <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE786;" />
+                </NavigationViewItem.Icon>
+            </NavigationViewItem>
+            <NavigationViewItem x:Uid="Shell_TextSvgPlayer"
+                                helpers:NavHelper.NavigateTo="SvgConverter.SampleApp.ViewModels.TextSvgPlayerViewModel">
+                <NavigationViewItem.Icon>
+                    <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xF17F;" />
+                </NavigationViewItem.Icon>
+            </NavigationViewItem>
+            <NavigationViewItem x:Uid="Shell_ImageToSvg"
+                                helpers:NavHelper.NavigateTo="SvgConverter.SampleApp.ViewModels.ImageToSvgViewModel">
+                <NavigationViewItem.Icon>
+                    <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xEB9F;" />
+                </NavigationViewItem.Icon>
+            </NavigationViewItem>
+            <NavigationViewItem x:Uid="Shell_InkToSvg"
+                                helpers:NavHelper.NavigateTo="SvgConverter.SampleApp.ViewModels.InkToSvgViewModel">
+                <NavigationViewItem.Icon>
+                    <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xEE56;" />
+                </NavigationViewItem.Icon>
+            </NavigationViewItem>
+        </NavigationView.MenuItems>
+        <i:Interaction.Behaviors>
+            <ic:EventTriggerBehavior EventName="ItemInvoked">
+                <ic:InvokeCommandAction Command="{x:Bind ViewModel.ItemInvokedCommand}" />
+            </ic:EventTriggerBehavior>
+        </i:Interaction.Behaviors>
+        <Grid>
+            <Frame x:Name="shellFrame" />
+        </Grid>
+    </NavigationView>
+</Page>

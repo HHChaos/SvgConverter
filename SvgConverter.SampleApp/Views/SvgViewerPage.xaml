@@ -1,0 +1,78 @@
+﻿<Page
+    x:Class="SvgConverter.SampleApp.Views.SvgViewerPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="using:SvgConverter.SampleApp.Controls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    DataContext="{Binding SvgViewerViewModel, Source={StaticResource Locator}}"
+    Style="{StaticResource PageStyle}"
+    mc:Ignorable="d">
+    <Grid x:Name="ContentArea">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <CommandBar
+                    x:Name="BackHomeBar"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Top"
+                    Background="{ThemeResource SystemControlBackgroundAccentBrush}"
+                    DefaultLabelPosition="Right"
+                    IsOpen="False"
+                    Visibility="{Binding ShowBackHomeBtn}">
+                    <AppBarButton
+                        x:Uid="BtnBackHome"
+                        Command="{Binding BackHomeCommand}"
+                        Foreground="{ThemeResource SystemControlForegroundChromeWhiteBrush}"
+                        Icon="Home"
+                        Label="Home" />
+                </CommandBar>
+                <CommandBar
+                    Grid.Column="1"
+                    Margin="0,0,0,0"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Center"
+                    VerticalContentAlignment="Center"
+                    DefaultLabelPosition="Right"
+                    IsOpen="False">
+                    <CommandBar.Content>
+                        <TextBlock
+                            x:Name="TbFileName"
+                            Margin="10,0"
+                            FontSize="16"
+                            Text="{Binding FileName}" />
+                    </CommandBar.Content>
+                    <AppBarButton
+                        x:Name="BtnPickSvgFile"
+                        x:Uid="BtnPickSvgFile"
+                        Command="{Binding PickFileCommand}"
+                        Icon="OpenFile"
+                        Label="Pick" />
+                    <AppBarButton
+                        x:Name="BtnSaveSvgFile"
+                        x:Uid="BtnSaveSvgFile"
+                        Command="{Binding SavePngCommand}"
+                        Icon="Save"
+                        Label="Save" />
+                    <CommandBar.SecondaryCommands>
+                        <AppBarButton
+                            Command="{Binding FeedbackCommand}"
+                            Icon="Favorite"
+                            Label="Feedback" />
+                    </CommandBar.SecondaryCommands>
+                </CommandBar>
+            </Grid>
+            <controls:AnimationPlayer
+                x:Name="AnimationPlayer"
+                Grid.Row="1"
+                SvgElement="{Binding SvgElement, Mode=TwoWay}" />
+        </Grid>
+    </Grid>
+</Page>
