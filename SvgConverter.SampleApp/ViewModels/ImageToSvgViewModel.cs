@@ -63,6 +63,8 @@ namespace SvgConverter.SampleApp.ViewModels
 
         private async Task PickBackImageFile()
         {
+            var waitingDialog = new WaitingDialog("Pick a picture...");
+            waitingDialog.Show();
             var openPicker = new FileOpenPicker
             {
                 ViewMode = PickerViewMode.Thumbnail,
@@ -73,6 +75,7 @@ namespace SvgConverter.SampleApp.ViewModels
             openPicker.FileTypeFilter.Add(".jpeg");
             var file = await openPicker.PickSingleFileAsync();
             if (file != null) BackImageFile = file;
+            waitingDialog.Close();
         }
     }
 }

@@ -100,7 +100,7 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="HHChaosToolkit.UWP">
-      <Version>1.0.0.1</Version>
+      <Version>1.0.1</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform">
       <Version>6.1.7</Version>
