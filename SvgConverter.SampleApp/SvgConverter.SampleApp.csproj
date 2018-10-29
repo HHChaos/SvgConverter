@@ -144,6 +144,7 @@
     <Compile Include="Helpers\NavHelper.cs" />
     <Compile Include="Helpers\SettingsStorageExtensions.cs" />
     <Compile Include="Models\ColorInfo.cs" />
+    <Compile Include="Models\HandInfo.cs" />
     <Compile Include="Models\PlayState.cs" />
     <Compile Include="Models\TextSvgInfo.cs" />
     <Compile Include="Services\ActivationService.cs" />

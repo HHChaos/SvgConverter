@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
 using System.Numerics;
 using System.Threading;
 using System.Threading.Tasks;
@@ -57,12 +56,16 @@ namespace SvgConverter.SampleApp.Controls
             if (!DesignMode.DesignModeEnabled)
             {
                 Canvas.CreateResources += Canvas_CreateResources;
-                Loaded += UserControl_Loaded;
                 SizeChanged += UserControl_SizeChanged;
                 Unloaded += UserControl_Unloaded;
             }
         }
 
+        public HandInfo Hand { get; set; } = new HandInfo
+        {
+            Source = new Uri("ms-appx:///Assets/hand1.png"),
+            PenOffect = new Point(17, 91)
+        };
 
         public TextSvgInfo TextSvgInfo
         {
@@ -195,11 +198,21 @@ namespace SvgConverter.SampleApp.Controls
             if (d is AnimationPlayer control) await control.UpdateAnimationItem((SvgElement) e.NewValue);
         }
 
-        private void Canvas_CreateResources(CanvasAnimatedControl sender, CanvasCreateResourcesEventArgs args)
+        private async void Canvas_CreateResources(CanvasAnimatedControl sender, CanvasCreateResourcesEventArgs args)
         {
             InitedEvent?.Invoke(this, EventArgs.Empty);
-            foreach (var t in _lazyTasks.ToList()) t.Invoke(ResourceCreator);
+            foreach (var t in _lazyTasks) t.Invoke(ResourceCreator);
             _lazyTasks.Clear();
+            if (Hand != null)
+                using (var randomAccessStream = new InMemoryRandomAccessStream())
+                {
+                    var handFile =
+                        await StorageFile.GetFileFromApplicationUriAsync(Hand.Source);
+                    var buffer = await FileIO.ReadBufferAsync(handFile);
+                    await randomAccessStream.WriteAsync(buffer);
+                    randomAccessStream.Seek(0);
+                    _handBitmap = await CanvasBitmap.LoadAsync(ResourceCreator, randomAccessStream);
+                }
         }
 
         public event EventHandler InitedEvent;
@@ -240,15 +253,14 @@ namespace SvgConverter.SampleApp.Controls
             lock (_lockobj)
             {
                 var handPosition = _animationItem?.Draw(args.DrawingSession, needDrawLenght);
-                if (handPosition != null && _handBitmap != null)
+                if (Hand != null && handPosition != null && _handBitmap != null)
                 {
-                    var position = handPosition.Value - new Vector2(17, 91);
+                    var position = handPosition.Value - Hand.PenOffect.ToVector2();
                     args.DrawingSession.Transform = Matrix3x2.Identity;
                     args.DrawingSession.DrawImage(_handBitmap, position);
                 }
             }
 
-            args.DrawingSession.Transform = Matrix3x2.Identity;
             _context.Post(_ =>
             {
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Progress"));
@@ -283,19 +295,6 @@ namespace SvgConverter.SampleApp.Controls
             }
         }
 
-
-        private async void UserControl_Loaded(object sender, RoutedEventArgs e)
-        {
-            using (var randomAccessStream = new InMemoryRandomAccessStream())
-            {
-                var handFile = await StorageFile.GetFileFromApplicationUriAsync(new Uri("ms-appx:///Assets/hand1.png"));
-                var buffer = await FileIO.ReadBufferAsync(handFile);
-                await randomAccessStream.WriteAsync(buffer);
-                randomAccessStream.Seek(0);
-                _handBitmap = await CanvasBitmap.LoadAsync(ResourceCreator, randomAccessStream);
-            }
-        }
-
         private void UserControl_Unloaded(object sender, RoutedEventArgs e)
         {
             PlayState = PlayState.Stopped;
@@ -303,6 +302,8 @@ namespace SvgConverter.SampleApp.Controls
             {
                 _animationItem?.Dispose();
                 _animationItem = null;
+                _handBitmap?.Dispose();
+                _handBitmap = null;
             }
         }
 
