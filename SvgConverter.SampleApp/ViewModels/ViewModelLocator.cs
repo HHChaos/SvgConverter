@@ -1,6 +1,8 @@
 ﻿using Windows.UI.Xaml.Data;
 using CommonServiceLocator;
-using GalaSoft.MvvmLight.Ioc;
+using Unity.ServiceLocation;
+using Unity;
+using Unity.Lifetime;
 using HHChaosToolkit.UWP.Mvvm;
 using HHChaosToolkit.UWP.Services;
 using HHChaosToolkit.UWP.Services.Navigation;
@@ -32,11 +34,15 @@ namespace SvgConverter.SampleApp.ViewModels
 
         public ShellViewModel ShellViewModel => ServiceLocator.Current.GetInstance<ShellViewModel>();
 
+        private IUnityContainer _container;
         public void InitViewModelLocator()
         {
-            ServiceLocator.SetLocatorProvider(() => SimpleIoc.Default);
-            SimpleIoc.Default.Register(() => new ObjectPickerService());
-            SimpleIoc.Default.Register(() => new SubWindowsService());
+            _container = new UnityContainer();
+            var _serviceLocator = new UnityServiceLocator(_container);
+            ServiceLocator.SetLocatorProvider(() => _serviceLocator);
+
+            _container.RegisterType<ObjectPickerService>(new ContainerControlledLifetimeManager())
+                      .RegisterType<SubWindowsService>(new ContainerControlledLifetimeManager());
 
             RegisterNavigationService<ShellViewModel, ShellPage>(NavigationServiceList.DefaultNavigationServiceKey);
             RegisterNavigationService<SvgViewerViewModel, SvgViewerPage>(NavigationServiceList
@@ -53,7 +59,7 @@ namespace SvgConverter.SampleApp.ViewModels
         public void RegisterNavigationService<VM, V>(string nsKey)
             where VM : ViewModelBase
         {
-            SimpleIoc.Default.Register<VM>();
+            _container.RegisterType<VM>(new ContainerControlledLifetimeManager());
             if (!NavigationServiceList.Instance.IsRegistered(nsKey))
                 NavigationServiceList.Instance.Register(nsKey, new NavigationService());
             var contentService = NavigationServiceList.Instance[nsKey];
@@ -63,14 +69,14 @@ namespace SvgConverter.SampleApp.ViewModels
         public void RegisterObjectPicker<T, VM, V>()
             where VM : ObjectPickerBase<T>
         {
-            SimpleIoc.Default.Register<VM>();
+            _container.RegisterType<VM>(new ContainerControlledLifetimeManager());
             ObjectPickerService.Configure(typeof(T).FullName, typeof(VM).FullName, typeof(V));
         }
 
         public void RegisterSubWindow<VM, V>()
             where VM : SubWindowBase
         {
-            SimpleIoc.Default.Register<VM>();
+            _container.RegisterType<VM>(new ContainerControlledLifetimeManager());
             SubWindowsService.Configure(typeof(VM).FullName, typeof(V));
         }
     }

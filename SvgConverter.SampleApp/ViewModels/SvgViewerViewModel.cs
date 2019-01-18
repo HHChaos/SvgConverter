@@ -103,7 +103,13 @@ namespace SvgConverter.SampleApp.ViewModels
                     };
                     picker.FileTypeChoices.Add("PNG File", new List<string> {".png"});
                     var file = await picker.PickSaveFileAsync();
-                    if (file != null) await Win2DSvgElement.RenderImage(file, SvgElement);
+                    if (file != null)
+                    {
+                        using (var stream = await file.OpenAsync(FileAccessMode.ReadWrite))
+                        {
+                            await Win2DSvgElement.RenderImage(stream, SvgElement);
+                        }
+                    }
                 });
             }
         }

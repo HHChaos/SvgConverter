@@ -18,7 +18,7 @@ namespace SvgConverter.SampleApp.ViewModels
 
         public TextSvgPlayerViewModel()
         {
-            foreach (var font in CanvasFontSet.GetSystemFontSet().Fonts.Select(font => font.FamilyNames?.First().Value)
+            foreach (var font in CanvasFontSet.GetSystemFontSet().Fonts.Where(font => !font.IsSymbolFont).Select(font => font.FamilyNames?.First().Value)
                 .Distinct())
                 FontNames.Add(font);
             foreach (var p in typeof(Colors).GetProperties())

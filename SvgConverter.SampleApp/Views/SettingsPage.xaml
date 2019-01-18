@@ -65,10 +65,12 @@
                 <TextBlock
                     x:Uid="Settings_AboutDescription"
                     Margin="{StaticResource EightTopMargin}" />
-
                 <HyperlinkButton
                     x:Uid="Settings_PrivacyTermsLink"
                     Margin="{StaticResource EightTopMargin}" />
+                <HyperlinkButton
+                    Content="Open Source Page"
+                    NavigateUri="https://github.com/HHChaos/SvgLab" />
             </StackPanel>
         </StackPanel>
     </Grid>
