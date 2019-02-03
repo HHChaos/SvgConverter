@@ -112,9 +112,6 @@
     <PackageReference Include="Newtonsoft.Json">
       <Version>11.0.2</Version>
     </PackageReference>
-    <PackageReference Include="SvgConverter">
-      <Version>1.2.1</Version>
-    </PackageReference>
     <PackageReference Include="Unity">
       <Version>5.8.13</Version>
     </PackageReference>
@@ -244,7 +241,12 @@
   <ItemGroup>
     <Compile Include="Helpers\ResourceExtensions.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\SvgConverter\SvgConverter.csproj">
+      <Project>{500b15e8-7089-4eb2-bff5-4feaac44ba56}</Project>
+      <Name>SvgConverter</Name>
+    </ProjectReference>
+  </ItemGroup>
   <ItemGroup>
     <Content Include="Assets\hand1.png" />
     <Content Include="Assets\sample.svg" />

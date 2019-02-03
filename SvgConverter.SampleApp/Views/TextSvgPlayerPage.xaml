@@ -23,8 +23,7 @@
                     <ColumnDefinition Width="1*" />
                     <ColumnDefinition Width="auto" />
                 </Grid.ColumnDefinitions>
-                <Grid BorderBrush="{ThemeResource SystemControlBackgroundListMediumRevealBorderBrush}"
-                      BorderThickness="3">
+                <Grid BorderBrush="{ThemeResource SystemControlBackgroundListMediumRevealBorderBrush}" BorderThickness="3">
                     <TextBox
                         x:Name="TbContent"
                         x:Uid="TbContent"

@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<package>
+  <metadata>
+    <!--*-->
+    <id>SvgConverter</id>
+    <!--*-->
+    <version>1.2.1</version>
+    <title>SvgConverter</title>
+    <!--*-->
+    <authors>HHChaos</authors>
+    <owners>HHChaos</owners>
+    <!--
+    <licenseUrl></licenseUrl>
+    <projectUrl></projectUrl>
+    <iconUrl></iconUrl>
+-->
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <!--*-->
+    <description>SvgConverter is an assembly for UWP platforms to read and display SVG files.</description>
+    <!--*-->
+    <releaseNotes>Added parse "display".</releaseNotes>
+    <copyright>HHChaos Copyright ©  2018</copyright>
+    <tags>C# UWP SVG</tags>
+    <dependencies>
+      <dependency id="Win2D.uwp" version="1.21.0" />
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="bin\Release\SvgConverter.dll" target="lib\uap10.0" />
+    <file src="bin\Release\SvgConverter.pdb" target="lib\uap10.0" />
+    <file src="bin\Release\SvgConverter.pri" target="lib\uap10.0" />
+  </files>
+</package>
