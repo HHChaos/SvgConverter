@@ -2,15 +2,13 @@
     x:Class="SvgConverter.SampleApp.Views.InkToSvgPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="using:SvgConverter.SampleApp.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:controls="using:SvgConverter.SampleApp.Controls"
-    Style="{StaticResource PageStyle}"
     DataContext="{Binding InkToSvgViewModel, Source={StaticResource Locator}}"
+    Style="{StaticResource PageStyle}"
     mc:Ignorable="d">
-    <Grid
-        x:Name="ContentArea"
-        Margin="{StaticResource MediumLeftRightMargin}">
+    <Grid x:Name="ContentArea" Margin="{StaticResource MediumLeftRightMargin}">
         <controls:InkStrokeCollection x:Name="InkStrokeCollection" />
         <InkToolbar
             HorizontalAlignment="Right"
@@ -19,15 +17,16 @@
             Orientation="Vertical"
             TargetInkCanvas="{x:Bind InkStrokeCollection.RootInkCanvas}">
             <InkToolbar.Children>
-                <InkToolbarCustomToolButton Command="{x:Bind InkStrokeCollection.UndoCommand, Mode=OneWay}"
-                                            ToolTipService.ToolTip="Undo">
+                <InkToolbarCustomToolButton Command="{x:Bind InkStrokeCollection.UndoCommand, Mode=OneWay}" ToolTipService.ToolTip="Undo">
                     <SymbolIcon Symbol="Undo" />
                 </InkToolbarCustomToolButton>
-                <InkToolbarCustomToolButton Command="{x:Bind InkStrokeCollection.RedoCommand, Mode=OneWay}"
-                                            ToolTipService.ToolTip="Redo">
+                <InkToolbarCustomToolButton Command="{x:Bind InkStrokeCollection.RedoCommand, Mode=OneWay}" ToolTipService.ToolTip="Redo">
                     <SymbolIcon Symbol="Redo" />
                 </InkToolbarCustomToolButton>
-                <InkToolbarCustomToolButton x:Name="InkBtnSave" Click="InkBtnSave_Click" ToolTipService.ToolTip="Save">
+                <InkToolbarCustomToolButton
+                    x:Name="InkBtnSave"
+                    Click="InkBtnSave_Click"
+                    ToolTipService.ToolTip="Save">
                     <SymbolIcon Symbol="Save" />
                 </InkToolbarCustomToolButton>
                 <InkToolbarBallpointPenButton />
