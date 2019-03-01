@@ -8,6 +8,12 @@ namespace SvgConverter.SampleApp.Views
         public TextSvgPlayerPage()
         {
             InitializeComponent();
+            this.Loaded += TextSvgPlayerPage_Loaded;
+        }
+
+        private void TextSvgPlayerPage_Loaded(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        {
+            ViewModel?.InitPlayer(AnimationPlayer);
         }
 
         private TextSvgPlayerViewModel ViewModel => DataContext as TextSvgPlayerViewModel;

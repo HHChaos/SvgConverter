@@ -26,16 +26,6 @@ namespace SvgConverter.SampleApp.Controls
 {
     public sealed partial class AnimationPlayer : UserControl, INotifyPropertyChanged
     {
-        // Using a DependencyProperty as the backing store for SvgElement.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty AnimationItemProperty =
-            DependencyProperty.Register("SvgElement", typeof(SvgElement), typeof(AnimationPlayer),
-                new PropertyMetadata(null, SvgElementPropertyChangedCallback));
-
-        // Using a DependencyProperty as the backing store for TextSvgInfo.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty TextSvgInfoProperty =
-            DependencyProperty.Register("TextSvgInfo", typeof(TextSvgInfo), typeof(AnimationPlayer),
-                new PropertyMetadata(null, TextSvgInfoPropertyChangedCallback));
-
         private readonly SynchronizationContext _context = SynchronizationContext.Current;
         private readonly List<Action<ICanvasResourceCreator>> _lazyTasks = new List<Action<ICanvasResourceCreator>>();
         private readonly object _lockobj = new object();
@@ -66,18 +56,6 @@ namespace SvgConverter.SampleApp.Controls
             Source = new Uri("ms-appx:///Assets/hand1.png"),
             PenOffect = new Point(17, 91)
         };
-
-        public TextSvgInfo TextSvgInfo
-        {
-            get => (TextSvgInfo) GetValue(TextSvgInfoProperty);
-            set => SetValue(TextSvgInfoProperty, value);
-        }
-
-        public SvgElement SvgElement
-        {
-            get => (SvgElement) GetValue(AnimationItemProperty);
-            set => SetValue(AnimationItemProperty, value);
-        }
 
         public bool IsPlayReverse { get; set; }
 
@@ -129,14 +107,7 @@ namespace SvgConverter.SampleApp.Controls
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
-
-        private static async void TextSvgInfoPropertyChangedCallback(DependencyObject d,
-            DependencyPropertyChangedEventArgs e)
-        {
-            if (d is AnimationPlayer control) await control.UpdateAnimationItem((TextSvgInfo) e.NewValue);
-        }
-
-        private async Task UpdateAnimationItem(TextSvgInfo textSvgInfo)
+        public async Task SetAnimationItem(TextSvgInfo textSvgInfo)
         {
             if (string.IsNullOrWhiteSpace(textSvgInfo?.Content))
                 return;
@@ -165,7 +136,7 @@ namespace SvgConverter.SampleApp.Controls
             }
         }
 
-        private async Task UpdateAnimationItem(SvgElement svg)
+        public async Task SetAnimationItem(SvgElement svg)
         {
             if (svg == null)
                 return;
@@ -190,12 +161,6 @@ namespace SvgConverter.SampleApp.Controls
                 var toast = new Toast(exception.Message);
                 toast.Show();
             }
-        }
-
-        private static async void SvgElementPropertyChangedCallback(DependencyObject d,
-            DependencyPropertyChangedEventArgs e)
-        {
-            if (d is AnimationPlayer control) await control.UpdateAnimationItem((SvgElement) e.NewValue);
         }
 
         private async void Canvas_CreateResources(CanvasAnimatedControl sender, CanvasCreateResourcesEventArgs args)

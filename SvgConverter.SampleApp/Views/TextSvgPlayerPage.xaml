@@ -86,8 +86,7 @@
             </Grid>
             <controls:AnimationPlayer
                 x:Name="AnimationPlayer"
-                Grid.Row="1"
-                TextSvgInfo="{Binding CurrentTextSvgInfo}" />
+                Grid.Row="1" />
         </Grid>
     </Grid>
 </Page>

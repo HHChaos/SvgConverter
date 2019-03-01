@@ -245,7 +245,7 @@ namespace SvgConverter.SampleApp.Controls
                 foreach (var p in inkPoints) path.Append($" L{p.X},{p.Y}");
                 if (path.Length != 0)
                     pathBuilder.Append(
-                        $"    <path fill=\"none\" opacity=\"0\" stroke-width=\"{size.Width}\" d=\"M{path.ToString().Substring(2)}\"/>\n");
+                        $"    <path fill=\"none\" opacity=\"0\" stroke-width=\"{size.Width}\" stroke-linecap=\"round\" d=\"M{path.ToString().Substring(2)}\"/>\n");
             }
 
             return pathBuilder.ToString();

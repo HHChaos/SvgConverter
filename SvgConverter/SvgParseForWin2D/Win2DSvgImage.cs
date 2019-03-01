@@ -11,16 +11,23 @@ namespace SvgConverter.SvgParseForWin2D
 {
     public class Win2DSvgImage : Win2DSvgNode
     {
-        private Win2DSvgImage()
+        public Win2DSvgImage(Rect viewRect, CanvasBitmap bitmap)
         {
             RenderMethod = RenderMethod.Composite;
+            ViewRect = viewRect;
+            SourceCanvasBitmap = bitmap;
         }
 
-        public Rect ViewRect { get; private set; }
-        public CanvasBitmap SourceCanvasBitmap { get; private set; }
+        public Rect ViewRect { get; set; }
+        public CanvasBitmap SourceCanvasBitmap { get; set; }
 
         public void Draw(CanvasDrawingSession targetDrawSession)
         {
+            if (SourceCanvasBitmap == null || ViewRect.Width == 0 || ViewRect.Height == 0)
+            {
+                return;
+            }
+
             if (ClipGeometry != null)
             {
                 var offScreen = new CanvasRenderTarget(SourceCanvasBitmap.Device,
@@ -71,12 +78,8 @@ namespace SvgConverter.SvgParseForWin2D
                 var buffer = CryptographicBuffer.CreateFromByteArray(imageBytes);
                 await randomAccessStream.WriteAsync(buffer);
                 randomAccessStream.Seek(0);
-                var img = new Win2DSvgImage
-                {
-                    ViewRect = viewRect,
-                    SourceCanvasBitmap = await CanvasBitmap.LoadAsync(device, randomAccessStream)
-                };
-                return img;
+                var win2DSvgImg = new Win2DSvgImage(viewRect, await CanvasBitmap.LoadAsync(device, randomAccessStream));
+                return win2DSvgImg;
             }
         }
 

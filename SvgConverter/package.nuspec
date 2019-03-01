@@ -4,7 +4,7 @@
     <!--*-->
     <id>SvgConverter</id>
     <!--*-->
-    <version>1.2.1</version>
+    <version>1.2.2</version>
     <title>SvgConverter</title>
     <!--*-->
     <authors>HHChaos</authors>
@@ -16,9 +16,9 @@
 -->
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <!--*-->
-    <description>SvgConverter is an assembly for UWP platforms to read and display SVG files.</description>
+    <description>SvgConverter is a library for UWP platform to convert and display SVG files.</description>
     <!--*-->
-    <releaseNotes>Added parse "display".</releaseNotes>
+    <releaseNotes>Open some api for Win2DSvgImage.</releaseNotes>
     <copyright>HHChaos Copyright ©  2018</copyright>
     <tags>C# UWP SVG</tags>
     <dependencies>

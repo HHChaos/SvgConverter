@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Package xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10" xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest" xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10" xmlns:genTemplate="http://schemas.microsoft.com/appx/developer/windowsTemplateStudio" IgnorableNamespaces="uap mp genTemplate">
-  <Identity Name="17706.SvgLab" Publisher="CN=762DAC80-D09A-4DA3-865D-FCC9681FEB06" Version="1.5.2.0" />
+  <Identity Name="17706.SvgLab" Publisher="CN=762DAC80-D09A-4DA3-865D-FCC9681FEB06" Version="1.5.3.0" />
   <mp:PhoneIdentity PhoneProductId="1f27b351-0b94-4bf6-898c-44de741834e5" PhonePublisherId="00000000-0000-0000-0000-000000000000" />
   <Properties>
     <DisplayName>SvgLab</DisplayName>

@@ -6,6 +6,8 @@ using HHChaosToolkit.UWP.Mvvm;
 using Microsoft.Graphics.Canvas.Text;
 using SvgConverter.SampleApp.Helpers;
 using SvgConverter.SampleApp.Models;
+using SvgConverter.SampleApp.Controls;
+using HHChaosToolkit.UWP.Services.Navigation;
 
 namespace SvgConverter.SampleApp.ViewModels
 {
@@ -15,6 +17,7 @@ namespace SvgConverter.SampleApp.ViewModels
         private TextSvgInfo _currentTextSvgInfo;
         private ColorInfo _selectedFontColor;
         private string _selectedFontName;
+        private AnimationPlayer _animationPlayer;
 
         public TextSvgPlayerViewModel()
         {
@@ -36,12 +39,27 @@ namespace SvgConverter.SampleApp.ViewModels
             if (FontNames.Count > 0) SelectedFontName = FontNames[0];
             if (AllColors.Count > 0) SelectedFontColor = AllColors.FirstOrDefault(c => c.Color == Colors.Black);
             Content = "TextToSvgContentSample".GetLocalized();
-            CurrentTextSvgInfo = new TextSvgInfo
+            _currentTextSvgInfo = new TextSvgInfo
             {
                 Content = Content ?? "Test Text",
                 FontName = _selectedFontName ?? "Arial",
                 FontColor = _selectedFontColor.Color
             };
+        }
+
+        public async void InitPlayer(AnimationPlayer animationPlayer)
+        {
+            _animationPlayer = animationPlayer;
+            if (_currentTextSvgInfo != null)
+            {
+                await _animationPlayer.SetAnimationItem(_currentTextSvgInfo);
+            }
+        }
+
+        public override void OnNavigatedFrom(NavigatedFromEventArgs e)
+        {
+            _animationPlayer = null;
+            base.OnNavigatedFrom(e);
         }
 
         public string Content
@@ -54,12 +72,6 @@ namespace SvgConverter.SampleApp.ViewModels
         {
             get => _selectedFontName;
             set => Set(ref _selectedFontName, value);
-        }
-
-        public TextSvgInfo CurrentTextSvgInfo
-        {
-            get => _currentTextSvgInfo;
-            set => Set(ref _currentTextSvgInfo, value);
         }
 
         public ColorInfo SelectedFontColor
@@ -75,15 +87,21 @@ namespace SvgConverter.SampleApp.ViewModels
         {
             get
             {
-                return new RelayCommand(() =>
+                return new RelayCommand(async () =>
                 {
                     if (!string.IsNullOrWhiteSpace(Content))
-                        CurrentTextSvgInfo = new TextSvgInfo
+                    {
+                        _currentTextSvgInfo = new TextSvgInfo
                         {
                             Content = Content,
                             FontName = _selectedFontName ?? "Arial",
                             FontColor = _selectedFontColor.Color
                         };
+                        if (_animationPlayer != null)
+                        {
+                            await _animationPlayer.SetAnimationItem(_currentTextSvgInfo);
+                        }
+                    }
                 });
             }
         }

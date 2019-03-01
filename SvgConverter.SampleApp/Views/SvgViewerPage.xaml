@@ -71,8 +71,7 @@
             </Grid>
             <controls:AnimationPlayer
                 x:Name="AnimationPlayer"
-                Grid.Row="1"
-                SvgElement="{Binding SvgElement, Mode=TwoWay}" />
+                Grid.Row="1"/>
         </Grid>
     </Grid>
 </Page>

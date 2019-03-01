@@ -12,6 +12,8 @@ using HHChaosToolkit.UWP.Services.Navigation;
 using SvgConverter.SampleApp.Views;
 using SvgConverter.SvgParse;
 using SvgConverter.SvgParseForWin2D;
+using System.Diagnostics;
+using SvgConverter.SampleApp.Controls;
 
 namespace SvgConverter.SampleApp.ViewModels
 {
@@ -19,13 +21,16 @@ namespace SvgConverter.SampleApp.ViewModels
     {
         private string _fileName;
         private bool _showBackHomeBtn;
-
         private SvgElement _svgElement;
+        private AnimationPlayer _animationPlayer;
 
-        public SvgElement SvgElement
+        public async void InitPlayer(AnimationPlayer animationPlayer)
         {
-            get => _svgElement;
-            set => Set(ref _svgElement, value);
+            _animationPlayer = animationPlayer;
+            if (_svgElement != null)
+            {
+                await _animationPlayer.SetAnimationItem(_svgElement);
+            }
         }
 
         public bool ShowBackHomeBtn
@@ -89,7 +94,7 @@ namespace SvgConverter.SampleApp.ViewModels
             {
                 return new RelayCommand(async () =>
                 {
-                    if (SvgElement == null)
+                    if (_svgElement == null)
                     {
                         var toast = new Toast("Empty SVG File!");
                         toast.Show();
@@ -107,7 +112,7 @@ namespace SvgConverter.SampleApp.ViewModels
                     {
                         using (var stream = await file.OpenAsync(FileAccessMode.ReadWrite))
                         {
-                            await Win2DSvgElement.RenderImage(stream, SvgElement);
+                            await Win2DSvgElement.RenderImage(stream, _svgElement);
                         }
                     }
                 });
@@ -116,6 +121,7 @@ namespace SvgConverter.SampleApp.ViewModels
 
         public override async void OnNavigatedTo(NavigationEventArgs e)
         {
+            _svgElement = null;
             if (e.Parameter is IStorageFile file)
             {
                 await UpdateAnimationItem(file);
@@ -132,20 +138,36 @@ namespace SvgConverter.SampleApp.ViewModels
             ShowBackHomeBtn = !(NavigationServiceList.Instance.Default.Frame?.Content is ShellPage);
         }
 
+        public override void OnNavigatedFrom(NavigatedFromEventArgs e)
+        {
+            _animationPlayer = null;
+            base.OnNavigatedFrom(e);
+        }
+
         private async Task UpdateAnimationItem(IStorageFile file)
         {
             if (file == null)
                 return;
+            var waitingDialog = new WaitingDialog("Loading SVG file...");
+            waitingDialog.Show();
             FileName = file.Name;
             try
             {
                 var svgContent = await FileIO.ReadTextAsync(file);
-                SvgElement = SvgElement.LoadFromXml(svgContent);
+                _svgElement = SvgElement.LoadFromXml(svgContent);
+                if (_animationPlayer != null)
+                {
+                    await _animationPlayer.SetAnimationItem(_svgElement);
+                }
             }
             catch (Exception exception)
             {
                 var toast = new Toast(exception.Message);
                 toast.Show();
+            }
+            finally
+            {
+                waitingDialog.Close();
             }
         }
     }
