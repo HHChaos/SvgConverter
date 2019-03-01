@@ -30,37 +30,35 @@ namespace SvgConverter.SvgParseForWin2D
 
             if (ClipGeometry != null)
             {
-                var offScreen = new CanvasRenderTarget(SourceCanvasBitmap.Device,
-                    SourceCanvasBitmap.SizeInPixels.Width,
-                    SourceCanvasBitmap.SizeInPixels.Height,
-                    96);
-                using (var drawSession = offScreen.CreateDrawingSession())
+                using (var offScreen = new CanvasCommandList(SourceCanvasBitmap.Device))
                 {
-                    var imgCommandList = new CanvasCommandList(SourceCanvasBitmap.Device);
-                    var markCommandList = new CanvasCommandList(SourceCanvasBitmap.Device);
-                    using (var imgDrawSession = imgCommandList.CreateDrawingSession())
+                    using (var drawSession = offScreen.CreateDrawingSession())
                     {
-                        imgDrawSession.Transform = RenderTransform;
-                        imgDrawSession.DrawImage(SourceCanvasBitmap);
+                        drawSession.Transform = RenderTransform;
+                        var imgCommandList = new CanvasCommandList(SourceCanvasBitmap.Device);
+                        var markCommandList = new CanvasCommandList(SourceCanvasBitmap.Device);
+                        using (var imgDrawSession = imgCommandList.CreateDrawingSession())
+                        {
+                            imgDrawSession.DrawImage(SourceCanvasBitmap, ViewRect);
+                        }
+
+                        using (var markDrawSession = markCommandList.CreateDrawingSession())
+                        {
+                            markDrawSession.FillGeometry(ClipGeometry, Colors.Black);
+                        }
+
+                        var effect = new AlphaMaskEffect
+                        {
+                            Source = imgCommandList,
+                            AlphaMask = markCommandList
+                        };
+                        drawSession.DrawImage(effect);
+                        imgCommandList.Dispose();
+                        markCommandList.Dispose();
                     }
 
-                    using (var markDrawSession = markCommandList.CreateDrawingSession())
-                    {
-                        markDrawSession.FillGeometry(ClipGeometry, Colors.Black);
-                    }
-
-                    var effect = new AlphaMaskEffect
-                    {
-                        Source = imgCommandList,
-                        AlphaMask = markCommandList
-                    };
-                    drawSession.DrawImage(effect);
-                    imgCommandList.Dispose();
-                    markCommandList.Dispose();
+                    targetDrawSession.DrawImage(offScreen);
                 }
-
-                targetDrawSession.DrawImage(offScreen, ViewRect);
-                offScreen.Dispose();
             }
             else
             {
