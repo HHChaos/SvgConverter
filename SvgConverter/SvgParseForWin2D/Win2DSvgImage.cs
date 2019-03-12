@@ -34,16 +34,18 @@ namespace SvgConverter.SvgParseForWin2D
                 {
                     using (var drawSession = offScreen.CreateDrawingSession())
                     {
-                        drawSession.Transform = RenderTransform;
+                        drawSession.Clear(Colors.Transparent);
                         var imgCommandList = new CanvasCommandList(SourceCanvasBitmap.Device);
                         var markCommandList = new CanvasCommandList(SourceCanvasBitmap.Device);
                         using (var imgDrawSession = imgCommandList.CreateDrawingSession())
                         {
+                            imgDrawSession.Clear(Colors.Transparent);
                             imgDrawSession.DrawImage(SourceCanvasBitmap, ViewRect);
                         }
 
                         using (var markDrawSession = markCommandList.CreateDrawingSession())
                         {
+                            markDrawSession.Clear(Colors.Transparent);
                             markDrawSession.FillGeometry(ClipGeometry, Colors.Black);
                         }
 
@@ -56,7 +58,7 @@ namespace SvgConverter.SvgParseForWin2D
                         imgCommandList.Dispose();
                         markCommandList.Dispose();
                     }
-
+                    targetDrawSession.Transform = RenderTransform;
                     targetDrawSession.DrawImage(offScreen);
                 }
             }
