@@ -1,4 +1,11 @@
-﻿using System;
+﻿using HHChaosToolkit.UWP.Controls;
+using HHChaosToolkit.UWP.Mvvm;
+using HHChaosToolkit.UWP.Services.Navigation;
+using SvgConverter.SampleApp.Controls;
+using SvgConverter.SampleApp.Views;
+using SvgConverter.SvgParse;
+using SvgConverter.SvgParseForWin2D;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -6,14 +13,6 @@ using Windows.Storage;
 using Windows.Storage.Pickers;
 using Windows.System;
 using Windows.UI.Xaml.Navigation;
-using HHChaosToolkit.UWP.Controls;
-using HHChaosToolkit.UWP.Mvvm;
-using HHChaosToolkit.UWP.Services.Navigation;
-using SvgConverter.SampleApp.Views;
-using SvgConverter.SvgParse;
-using SvgConverter.SvgParseForWin2D;
-using System.Diagnostics;
-using SvgConverter.SampleApp.Controls;
 
 namespace SvgConverter.SampleApp.ViewModels
 {
@@ -153,8 +152,7 @@ namespace SvgConverter.SampleApp.ViewModels
             FileName = file.Name;
             try
             {
-                var svgContent = await FileIO.ReadTextAsync(file);
-                _svgElement = SvgElement.LoadFromXml(svgContent);
+                _svgElement = await SvgElement.LoadFromFile(file);
                 if (_animationPlayer != null)
                 {
                     await _animationPlayer.SetAnimationItem(_svgElement);

@@ -1,11 +1,14 @@
-﻿using System.Collections.Generic;
-using System.IO;
-using System.Text.RegularExpressions;
-using System.Xml;
-using Windows.Foundation;
-using SvgConverter.SvgParse.Brushes;
+﻿using SvgConverter.SvgParse.Brushes;
 using SvgConverter.SvgParse.SvgAttributesHelper;
 using SvgConverter.SvgParse.Utilities;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
+using System.Xml;
+using Windows.Foundation;
+using Windows.Storage;
 
 namespace SvgConverter.SvgParse
 {
@@ -146,5 +149,18 @@ namespace SvgConverter.SvgParse
 
             return svg;
         }
-    }
+
+        /// <summary>
+        ///     从svg文件中加载svg
+        /// </summary>
+        /// <param name="svgFile"></param>
+        /// <returns></returns>
+        public static async Task<SvgElement> LoadFromFile(IStorageFile svgFile)
+        {
+            if (svgFile == null)
+                return null;
+            var svgContent = await FileIO.ReadTextAsync(svgFile);
+            return LoadFromXml(svgContent);
+        }
+     }
 }
