@@ -10,8 +10,7 @@ It provides the following features:
 ## Using SvgConverter
 
 ```csharp
-    var svgContent = await FileIO.ReadTextAsync(file);
-    var svgElement = SvgElement.LoadFromXml(svgContent);
+    var svgElement = await SvgElement.LoadFromFile(file);
     var win2DSvg = await Win2DSvgElement.Parse(resourceCreator, svgElement);
 ```
 
