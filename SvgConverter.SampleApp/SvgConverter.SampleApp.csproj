@@ -110,7 +110,7 @@
     </PackageReference>
     <!-- Nuget package references -->
     <PackageReference Include="Newtonsoft.Json">
-      <Version>11.0.2</Version>
+      <Version>13.0.2</Version>
     </PackageReference>
     <PackageReference Include="Unity">
       <Version>5.8.13</Version>
